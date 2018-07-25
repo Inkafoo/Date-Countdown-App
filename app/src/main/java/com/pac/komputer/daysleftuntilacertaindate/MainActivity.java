@@ -1,5 +1,4 @@
 package com.pac.komputer.daysleftuntilacertaindate;
-
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,8 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 import es.dmoral.toasty.Toasty;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,9 +52,8 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F44336")));            //set background color
-        actionBar.setTitle(Html.fromHtml("<font color='#FAFAFA'>Days - Date Countdown</font>"));    //set textColor and text
-
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F44336")));
+        actionBar.setTitle(Html.fromHtml("<font color='#FAFAFA'>Days - Date Countdown</font>"));
 
 
         loadData();
@@ -78,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyAdapter(newDates, MainActivity.this);
         recyclerView.setAdapter(adapter);
-
     }
 
     public void newDateDialog(){
@@ -100,13 +97,13 @@ public class MainActivity extends AppCompatActivity {
 
         chooseDate(editTextDate);
 
+
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
             }
         });
-
         buttonSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,15 +124,14 @@ public class MainActivity extends AppCompatActivity {
         final  Calendar myCalendar = Calendar.getInstance();
 
         final  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d MMMM yyyy");
-        long currentDate = System.currentTimeMillis();                                               //returns the current time in milliseconds.
-        String dateStringCalendar = simpleDateFormat.format(currentDate);                            //format currentDate to string in simpleDataFormat ("d MMMM yyyy")
-        editTextDate.setText(dateStringCalendar);                                                    //set editTextDate current Date
+        long currentDate = System.currentTimeMillis();
+        String dateStringCalendar = simpleDateFormat.format(currentDate);
+        editTextDate.setText(dateStringCalendar);
 
 
-        final DatePickerDialog.OnDateSetListener  date = new DatePickerDialog.OnDateSetListener() {         //the listener used to indicate the user has finished selecting a date
-            //detektor użyty do wskazania, że ​​użytkownik zakończył wybieranie daty
+        final DatePickerDialog.OnDateSetListener  date = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {     // set calendar date and update editDate
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -217,16 +213,15 @@ public class MainActivity extends AppCompatActivity {
             addNewRecycler(stringTitle, stringDate, stringDescription);
             alertDialog.dismiss();
 
-         }else if(editTextTitle.getText().toString().isEmpty() && dateIsOk(editTextDate)){                            //editTextTitle is empty
+         }else if(editTextTitle.getText().toString().isEmpty() && dateIsOk(editTextDate)){                              //editTextTitle is empty
                 Toasty.info(MainActivity.this, "Enter the title", Toast.LENGTH_SHORT).show();
-         }else if(!editTextTitle.getText().toString().isEmpty() && !dateIsOk(editTextDate)){                          //date is wrong
+         }else if(!editTextTitle.getText().toString().isEmpty() && !dateIsOk(editTextDate)){                            //date is wrong
                Toasty.info(MainActivity.this, "Enter the future date ", Toast.LENGTH_SHORT).show();
-         }else if(editTextTitle.getText().toString().isEmpty() && !dateIsOk(editTextDate)){
-               Toasty.error(MainActivity.this, "Enter the title and future date ", Toast.LENGTH_SHORT).show();          //title and date is wrong
+         }else if(editTextTitle.getText().toString().isEmpty() && !dateIsOk(editTextDate)){                             //title and date is wrong
+               Toasty.error(MainActivity.this, "Enter the title and future date ", Toast.LENGTH_SHORT).show();
          }
 
     }
-
 
 
     @Override
@@ -236,17 +231,4 @@ public class MainActivity extends AppCompatActivity {
         saveData();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        saveData();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        saveData();
-    }
 }

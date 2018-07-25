@@ -1,5 +1,4 @@
 package com.pac.komputer.daysleftuntilacertaindate.RecyclerView;
-
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
@@ -20,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import es.dmoral.toasty.Toasty;
 
 
@@ -35,6 +33,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
 
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_date_layout, parent ,false);
@@ -47,42 +46,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         holder.textViewTitle.setText(newDate.getStringTitle());
         holder.textViewDate.setText(newDate.getStringDate());
-        holder.textViewDescription.setText(newDate.getStringDescpition());
+        holder.textViewDescription.setText(newDate.getStringDescription());
         holder.textViewDays.setText("");
 
         holder.textViewPoMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                PopupMenu popupMenu = new PopupMenu(context, holder.textViewPoMenu);
-                popupMenu.inflate(R.menu.menu_recyclerview);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-
-                        switch (item.getItemId()){
-                            case R.id.menu_item_edit:
-                                    editItem(holder.textViewTitle, holder.textViewDate, holder.textViewDescription, position);
-                                break;
-
-                            case R.id.menu_item_delete:
-                                    deleteItem(position);
-                                break;
-
-                            default:
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.show();
+                createPopupMenu(holder, position);
             }
         });
 
 
         try {
             daysUntil(holder.textViewDate.getText().toString(), holder.textViewDays);
-        }catch (Exception e){}
+        } catch (Exception e){}
 
     }
 
@@ -112,10 +89,36 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         listDates.remove(position);
         notifyItemRemoved(position);
         notifyDataSetChanged();
+    }
 
+    private void createPopupMenu(final ViewHolder holder, final int position){
+
+        PopupMenu popupMenu = new PopupMenu(context, holder.textViewPoMenu);
+        popupMenu.inflate(R.menu.menu_recyclerview);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()){
+                    case R.id.menu_item_edit:
+                        editItem(holder.textViewTitle, holder.textViewDate, holder.textViewDescription, position);
+                        break;
+
+                    case R.id.menu_item_delete:
+                        deleteItem(position);
+                        break;
+
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
     }
 
     private void editItem(TextView textViewTitle, TextView textViewDate, TextView textViewDescription, final int position){
+
 
         //creation and display AlertDialog
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
@@ -132,6 +135,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         final EditText editTextDescription = (EditText) alertDialog.findViewById(R.id.edit_text_description);
         final Button buttonCancel = (Button) alertDialog.findViewById(R.id.button_cancel);
         final Button buttonSet = (Button) alertDialog.findViewById(R.id.button_set);
+
 
         //editTexts in AlertDialog view
         editTextTitle.setText(textViewTitle.getText().toString());
@@ -208,7 +212,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         listDates.add(position, date);
         notifyDataSetChanged();
-
     }
 
     private void daysUntil(String edtDate, TextView textViewDays) throws ParseException {
@@ -262,12 +265,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
             alertDialog.dismiss();
 
-        }else if(editTextTitle.getText().toString().isEmpty() && dateIsOk(editTextDate)){           //editTextTitle is empty
+        }else if(editTextTitle.getText().toString().isEmpty() && dateIsOk(editTextDate)){             //editTextTitle is empty
             Toasty.info(context, "Enter the title ", Toast.LENGTH_SHORT).show();
-        }else if(!editTextTitle.getText().toString().isEmpty() && !dateIsOk(editTextDate)){         //date is wrong
+        }else if(!editTextTitle.getText().toString().isEmpty() && !dateIsOk(editTextDate)){           //date is wrong
             Toasty.info(context, "Enter the future date ", Toast.LENGTH_SHORT).show();
-        }else if(editTextTitle.getText().toString().isEmpty() && !dateIsOk(editTextDate)){
-            Toasty.error(context, "Enter the title and future date ", Toast.LENGTH_SHORT).show();     //editTextTitle and date are wrong
+        }else if(editTextTitle.getText().toString().isEmpty() && !dateIsOk(editTextDate)){            //editTextTitle and date are wrong
+            Toasty.error(context, "Enter the title and future date ", Toast.LENGTH_SHORT).show();
         }
 
     }
